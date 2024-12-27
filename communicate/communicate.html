@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시계</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+    
+        <div class="battery">
+            <p id="batteryPercentage">배터리: 100%</p>
+        </div>  
+    
+        <div class="time">
+            <p id="currentTime">2024-12-27 00:00:00</p>
+        </div>
+
+        <div class="alarms">
+            <p>알람 현황:</p>
+            <ul id="alarmList"></ul>
+            <input type="number" id="alarmHour" min="0" max="23" />
+            <input type="number" id="alarmMinute" min="0" max="59" />
+            <input type="number" id="alarmSecond" min="0" max="59" />
+            <button id="addAlarmBtn">알람</button>
+        </div>
+    </div>
+
+    <script>
+        let batteryPercentage = 100; 
+        let alarmCount = 0; 
+        let alarms = []; 
+
+       
+        function decreaseBattery() {
+            if (batteryPercentage > 0) {
+                batteryPercentage--;
+                document.getElementById("batteryPercentage").innerText = `배터리: ${batteryPercentage}%`;
+
+                if (batteryPercentage === 0) {
+                    document.getElementById("currentTime").style.backgroundColor = "black";
+                }
+            }
+        }
+
+  
+        function addAlarm() {
+            const hour = document.getElementById("alarmHour").value;
+            const minute = document.getElementById("alarmMinute").value;
+            const second = document.getElementById("alarmSecond").value;
+
+            if (hour === "" || minute === "" || second === "") {
+                alert("알람 시간을 입력해주세요.");
+                return;
+            }
+
+            if (alarmCount < 3) {
+                const alarmTime = `${hour}:${minute}:${second}`;
+                alarms.push({ time: alarmTime });
+                alarmCount++;
+                updateAlarmList();
+            } else {
+                alert("알람은 최대 3개까지 가능합니다.");
+            }
+        }
+
+        function updateAlarmList() {
+            const alarmList = document.getElementById("alarmList");
+            alarmList.innerHTML = "";
+            if (alarms[0]) {
+                const alarmItem1 = document.createElement("li");
+                alarmItem1.innerText = "알람 1: " + alarms[0].time;
+                alarmList.appendChild(alarmItem1);
+            }
+        
+            if (alarms[1]) {
+                const alarmItem2 = document.createElement("li");
+                alarmItem2.innerText = "알람 2: " + alarms[1].time;
+                alarmList.appendChild(alarmItem2);
+            }
+        
+            if (alarms[2]) {
+                const alarmItem3 = document.createElement("li");
+                alarmItem3.innerText = "알람 3: " + alarms[2].time;
+                alarmList.appendChild(alarmItem3);
+            }
+        }
+
+        document.getElementById("addAlarmBtn").addEventListener("click", addAlarm);
+
+        setInterval(() => {
+            decreaseBattery();
+            updateTime();
+        }, 1000);
+    </script>
+</body>
+</html>

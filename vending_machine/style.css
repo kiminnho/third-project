@@ -52,7 +52,6 @@ body {
 .item_button:active {
     background-color: red;
 }
-
 .pay_part {
     display: flex;
     width: 100%;
